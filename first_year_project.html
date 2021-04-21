@@ -6,20 +6,24 @@
     <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-multi-choice.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-external-html.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-video-button-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <script>
-     
+    var conditional_array = ["cond1", "cond2", "cond3"]
+    var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
     var welcome = {
         type: 'html-keyboard-response',
         stimulus: 'Welcome to the experiment. This experiment looks to examine how prepatory materials impact student learning of a novel topic. Your participation is entirely voluntary and you can terminate your participation at any time. The study will take you about 30 - 40 minutes to complete. Once you are ready to begin, please any key to continue.'
     }
+
+ //Experimental condition 1 = Multiple choice     
     var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
     var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
-      
+     
       var multi_choice_trial = {
         type: 'survey-multi-choice',
         questions: [
@@ -33,7 +37,7 @@
           required:true}
         ],
       };
-      
+ //Experimental condition 2 = Free response 
       var free_response_trial = {
         type: 'survey-text',
         questions: [
@@ -43,24 +47,14 @@
         
   ],
 };
-var check_consent = function(elem) {
-  if (document.getElementById('consent_checkbox').checked) {
-    return true;
-  }
-  else {
-    alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
-    return false;
-  }
-  return false;
-};
 
 
-// declare the block.
+
+//Control condition = Reading trial
 var reading_trial = {
   type:'external-html',
   url: "brachial_plexus_reading.html",
   cont_btn: "start",
-  check_fn: check_consent
 };
 var video = {
     type: 'video-button-response',
@@ -86,48 +80,33 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
           required:true}
       ]
       }
-
+    let end = {
+        type: `html-keyboard-response`,
+        stimulus: `<p>Thank you for your time! You have now finished the experiment and you can exit the window.</p>`,
+        on_load: function(){
+          jsPsych.data.get()
+            .localSave('csv', 'brachial_plexus_of_data.csv');
+        }
+      };
 /* create timeline */
       // here we create a list of the trials
-      let timeline = [welcome, multi_choice_trial, video, post_test];
+      let timeline = [welcome, 
+    //   if (condition == "cond1") {
+    //     timeline.push(multi_choice_trial);
+    // } else if(condition == "cond2") {
+    //     timeline.push(free_response_trial);
+    // }else (condition == "cond3") {
+    //     timeline.push(reading_trial);
+    // } 
+      video, 
+      post_test,
+    end];
 
       /* start the experiment */
       jsPsych.init({
         timeline: timeline
       });
-//       var pre_if_trial = {
-//     type: 'html-keyboard-response',
-//     stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
-// }
 
-// var if_trial = {
-//     type: 'html-keyboard-response',
-//     stimulus: 'You chose to view the trial. Press any key to continue.'
-// }
-
-// var if_node = {
-//     timeline: [if_trial],
-//     conditional_function: function(){
-//         // get the data from the previous trial,
-//         // and check which key was pressed
-//         var data = jsPsych.data.get().last(1).values()[0];
-//         if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
-//             return false;
-//         } else {
-//             return true;
-//         }
-//     }
-// }
-
-// var after_if_trial = {
-//     type: 'html-keyboard-response',
-//     stimulus: 'This is the trial after the conditional.'
-// }
-
-// jsPsych.init({
-//     timeline: [pre_if_trial, if_node, after_if_trial],
-//     on_finish: function(){jsPsych.data.displayData(); }
-// });
       </script>
 
     
