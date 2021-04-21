@@ -17,29 +17,31 @@
         type: 'html-keyboard-response',
         stimulus: 'Welcome to the experiment. This experiment looks to examine how prepatory materials impact to student learning of a novel topic. Your participation is entirely voluntary and you can terminate your participation at any time. The study will take you about 30 - 40 minutes to complete. Once you are ready to begin, please any key to continue.'
     }
-    var page_1_options = ["A", "B", "C", "D", "E"];
-    var page_2_options = ["A", "B", "C", "D", "E"];
+    var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
+    var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
       
       var multi_choice_block = {
         type: 'survey-multi-choice',
         questions: [
-          {prompt: "I like vegetables", name: 'Vegetables', options: page_1_options, required:true}, 
-          {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: false}
+          {prompt: "What regions of the spinal cord contributes to the brachial plexus?", 
+          name: 'Contributions_MC', 
+          options: page_1_options, 
+          required:true}, 
+          {prompt: "What kinds of neurons are found in the brachial plexus?", 
+          name: 'Neurons_MC', 
+          options: page_1_options, 
+          required:true}, 
+          {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: true}
         ],
       };
       
-      var multi_choice_block_horizontal = {
-        type: 'survey-multi-choice',
-        questions: [
-          {prompt: "I like vegetables", options: page_1_options, required: true, horizontal: true,}, 
-          {prompt: "I like fruit", options: page_2_options, required: false, horizontal: true}
-        ],
-      };
       var survey_trial = {
         type: 'survey-text',
         questions: [
-           {prompt: "How old are you?", name: 'Age'}, 
-            {prompt: "Where were you born?", name: 'BirthLocation'}
+           {prompt: "What regions of the spinal cord contributes to the brachial plexus?", name: 'Contributions_FR'}, 
+           {prompt: "What kinds of neurons are found in the brachial plexus?", 
+          name: 'Neurons_MC',}
+        
   ],
 };
 var video = {
@@ -58,39 +60,39 @@ var video = {
       jsPsych.init({
         timeline: timeline
       });
-      var pre_if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
-}
+//       var pre_if_trial = {
+//     type: 'html-keyboard-response',
+//     stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
+// }
 
-var if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'You chose to view the trial. Press any key to continue.'
-}
+// var if_trial = {
+//     type: 'html-keyboard-response',
+//     stimulus: 'You chose to view the trial. Press any key to continue.'
+// }
 
-var if_node = {
-    timeline: [if_trial],
-    conditional_function: function(){
-        // get the data from the previous trial,
-        // and check which key was pressed
-        var data = jsPsych.data.get().last(1).values()[0];
-        if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
-            return false;
-        } else {
-            return true;
-        }
-    }
-}
+// var if_node = {
+//     timeline: [if_trial],
+//     conditional_function: function(){
+//         // get the data from the previous trial,
+//         // and check which key was pressed
+//         var data = jsPsych.data.get().last(1).values()[0];
+//         if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
+//             return false;
+//         } else {
+//             return true;
+//         }
+//     }
+// }
 
-var after_if_trial = {
-    type: 'html-keyboard-response',
-    stimulus: 'This is the trial after the conditional.'
-}
+// var after_if_trial = {
+//     type: 'html-keyboard-response',
+//     stimulus: 'This is the trial after the conditional.'
+// }
 
-jsPsych.init({
-    timeline: [pre_if_trial, if_node, after_if_trial],
-    on_finish: function(){jsPsych.data.displayData(); }
-});
+// jsPsych.init({
+//     timeline: [pre_if_trial, if_node, after_if_trial],
+//     on_finish: function(){jsPsych.data.displayData(); }
+// });
       </script>
 
     
