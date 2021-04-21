@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Brachial Plexus Experiment</title>
+    <script src="jspsych-6.3.0/jspsych.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-video-button-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
+    <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <script>
+     
+    var welcome = {
+        type: 'html-keyboard-response',
+        stimulus: 'Welcome to the experiment. This experiment looks to examine how prepatory materials impact to student learning of a novel topic. Your participation is entirely voluntary and you can terminate your participation at any time. The study will take you about 30 - 40 minutes to complete. Once you are ready to begin, please any key to continue.'
+    }
+    var page_1_options = ["A", "B", "C", "D", "E"];
+    var page_2_options = ["A", "B", "C", "D", "E"];
+      
+      var multi_choice_block = {
+        type: 'survey-multi-choice',
+        questions: [
+          {prompt: "I like vegetables", name: 'Vegetables', options: page_1_options, required:true}, 
+          {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: false}
+        ],
+      };
+      
+      var multi_choice_block_horizontal = {
+        type: 'survey-multi-choice',
+        questions: [
+          {prompt: "I like vegetables", options: page_1_options, required: true, horizontal: true,}, 
+          {prompt: "I like fruit", options: page_2_options, required: false, horizontal: true}
+        ],
+      };
+      var survey_trial = {
+        type: 'survey-text',
+        questions: [
+           {prompt: "How old are you?", name: 'Age'}, 
+            {prompt: "Where were you born?", name: 'BirthLocation'}
+  ],
+};
+var video = {
+    type: 'video-button-response',
+    stimulus: [
+        'video/brachial_plexus_video.mp4',
+    ],
+    choices: ['Complete'],
+    prompt: '<p>Please click the "Complete" button once you have finished watching the video.</p>'
+}
+/* create timeline */
+      // here we create a list of the trials
+      let timeline = [welcome, video, end];
+
+      /* start the experiment */
+      jsPsych.init({
+        timeline: timeline
+      });
+      var pre_if_trial = {
+    type: 'html-keyboard-response',
+    stimulus: 'The next trial is in a conditional statement. Press S to skip it, or V to view it.'
+}
+
+var if_trial = {
+    type: 'html-keyboard-response',
+    stimulus: 'You chose to view the trial. Press any key to continue.'
+}
+
+var if_node = {
+    timeline: [if_trial],
+    conditional_function: function(){
+        // get the data from the previous trial,
+        // and check which key was pressed
+        var data = jsPsych.data.get().last(1).values()[0];
+        if(jsPsych.pluginAPI.compareKeys(data.response, 's')){
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
+var after_if_trial = {
+    type: 'html-keyboard-response',
+    stimulus: 'This is the trial after the conditional.'
+}
+
+jsPsych.init({
+    timeline: [pre_if_trial, if_node, after_if_trial],
+    on_finish: function(){jsPsych.data.displayData(); }
+});
+      </script>
+
+    
+  </body>
+</html>

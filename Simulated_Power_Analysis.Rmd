@@ -1,0 +1,130 @@
+---
+title: "Simulated power analysis"
+author: "Chris Steadman"
+date: "4/14/2021"
+output: html_document
+---
+## This was taken from Dr. Jeff Bye and may be modified for personal use. ##
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Set up a repeated simulation
+
+Now that we've explored some data simulation, let's see what happens if we simulate the same experiment over and over again and run a *t*-test each time.
+
+```{r sim_setup}
+
+# define simulation parameters
+n_per_group <- 30
+n_simulations_to_run <- 100
+alpha <- .05
+# group statistics
+group1_mean <- 5.7
+group2_mean <- 5
+stdev <- .5
+
+# calculate effect size (why not?)
+cohens_d <- (group1_mean-group2_mean)/stdev
+```
+
+We will now run `r n_simulations_to_run` simulations of an experiment with `r n_per_group` participants per group.
+
+Since we are simulating data, we control **REALITY**.  You have set the true population parameters as:
+
+* Group 1 has a mean of `r group1_mean` and a standard deviation of `r stdev`.
+* Group 2 has a mean of `r group2_mean` and a standard deviation of `r stdev`.
+
+This means the true population effect size is *d* = `r cohens_d`.
+
+### Simulation
+
+To the simulator!
+
+```{r data_simulation}
+set.seed(1) # set the seed for reproducible randomness!
+
+# for now, don't worry too much about understanding the replicate() function
+# all you need to know is that this replicates the same code again and again
+#   (the amount of times is specified by n_simulations_to_run, defined above)
+#  and each time it simulates new data for each condition, according to the 
+#   parameters we defined above
+# in other words, it's similar to a loop, but the thing that changes each
+#   iteration isn't an index (like in a for-loop) but the randomly generated data
+# since rnorm() is different each time, replicate() is useful for repeating
+
+sim_t_reps <- replicate(n_simulations_to_run, {
+  # generate random data
+  # first, simulate data for group 1
+  data1 <- rnorm(n_per_group, mean=group1_mean, sd=stdev)
+   # second, simulate data for group 2
+  data2 <- rnorm(n_per_group, mean=group2_mean, sd=stdev)
+  # put into a data.frame for the current simulated data
+  cur_sim_data <- data.frame(
+    Condition = c(rep("Group 1",n_per_group), rep("Group 2",n_per_group)) ,
+    Score = c(data1, data2)
+  )
+  # then perform a t-test (by default, two-sided)
+  sim_t <- t.test(Score ~ Condition, data = cur_sim_data)
+  
+  # then we grab the p-value and *return* it to sim_t_reps
+  return(sim_t$p.value)
+} )
+```
+
+```{r sim_pvals}
+# after running all the simulations above, let's do some calculations
+round(sim_t_reps, digits = 3) # print out the p-vals, rounded to 3 decimals
+```
+
+That's a lot of *p*-values!  But we can see that we get quite different results across the simulations.  In other words, *p*-values vary, even for the same population parameters -- this is sampling variability!
+
+Let's summarize our result: 
+
+```{r sim_reject_h0}
+sum(sim_t_reps < alpha) # how many significant results?
+```
+
+Above, we compare the *p*-values to alpha (`r alpha`) to generate a logical vector, then run `sum()` on the logical vector (which adds up all the `TRUE` values).
+
+We can use this number (the frequency of rejecting the null hypothesis) to calculate power (assuming the null is false -- you determined that at the top).
+
+```{r sim_power}
+sum(sim_t_reps < alpha)/n_simulations_to_run * 100 # convert to power %
+```
+
+We've now used simulated data to estimate the *a priori* power for an experiment with the parameters we determined at the top.  Specifically, for the group means (`r group1_mean` and `r group2_mean`) and standard deviation (`r stdev`) you defined, given the sample size you set (`r n_per_group` each group), you would correctly reject the null hypothesis (assuming it's false) `r sum(sim_t_reps < alpha)/n_simulations_to_run * 100 `% of the time.
+
+### Plotting Power
+
+We can use the `hist()` function to generated a histogram of our *p*-values.
+
+```{r power_plot}
+# customized histogram
+hist(sim_t_reps, 
+     xlab="Simulated p-value", # change the x-axis label
+     # specify where the bin breaks are, from 0 to 1, size of .025
+     breaks = seq(0,1, by=.025),
+     main="Histogram of simulated p-values") 
+abline(v = alpha, col="red") # And add a red line at alpha (sig cutoff)
+```
+
+The above plot visualizes how often you'd expect a *p*-value in each bin (of size .025) for the following experiment parameters:
+
+* Group 1 has a mean of `r group1_mean` and a standard deviation of `r stdev`.
+* Group 2 has a mean of `r group2_mean` and a standard deviation of `r stdev`.
+* Thus, the true population effect size is *d* = `r cohens_d`.
+* And each group has a sample size of `r n_per_group`.
+
+*p*-values to the left of the red vertical line indicate rejecting the null hypothesis (*p* < $\alpha$).
+
+*p*-values to the left of the red vertical line indicate failing to reject the null hypothesis (*p* > $\alpha$).
+
+## Now you try!
+
+Now, try changing *sample size* to **40** (double sample size!) at the top, then run again.
+
+Then, try changing the *means* to the **same value** (this would make the null hypothesis true!), then run again. Note that this will not measure 'power' since the null hypothesis is true, but it will instead be measuring the Type I error rate (rejecting null hypo when it's actually true).
+
+Try any combination of parameters you can think of. Go wild! Discuss what you learn with everyone.
