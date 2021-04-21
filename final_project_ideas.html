@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My experiment</title>
+    <title>Brachial Plexus Experiment</title>
     <script src="jspsych-6.3.0/jspsych.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-video-button-response.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <script>
+    var welcome = {
+        type: 'html-keyboard-response',
+        stimulus: 'Welcome to the experiment. This experiment looks to examine '
+    }
     var page_1_options = ["A", "B", "C", "D", "E"];
     var page_2_options = ["A", "B", "C", "D", "E"];
       
@@ -28,7 +34,33 @@
           {prompt: "I like fruit", options: page_2_options, required: false, horizontal: true}
         ],
       };
+      var survey_trial = {
+        type: 'survey-text',
+        questions: [
+           {prompt: "How old are you?", name: 'Age'}, 
+            {prompt: "Where were you born?", name: 'BirthLocation'}
+  ],
+};
+var trial = {
+    type: 'video-button-response',
+    stimulus: [
+        'video/sample_video.mp4',
+        'video/sample_video.ogg'
+    ],
+    choices: ['Happy','Sad','Angry','Peaceful'],
+    prompt: '<p>Which emotion the best descriptor of the main character\'s feelings?</p>'
+}
+/* create timeline */
+      // here we create a list of the trials
+      let timeline = [welcome, categorization_trial, end];
+
+      /* start the experiment */
+      jsPsych.init({
+        timeline: timeline
+      });
+
       </script>
+
     
   </body>
 </html>
