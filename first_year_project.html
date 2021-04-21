@@ -20,7 +20,7 @@
     var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
     var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
       
-      var multi_choice_block = {
+      var multi_choice_trial = {
         type: 'survey-multi-choice',
         questions: [
           {prompt: "What regions of the spinal cord contributes to the brachial plexus?", 
@@ -29,13 +29,13 @@
           required:true}, 
           {prompt: "What kinds of neurons are found in the brachial plexus?", 
           name: 'Neurons_MC', 
-          options: page_1_options, 
+          options: page_2_options, 
           required:true}, 
           {prompt: "I like fruit", name: 'Fruit', options: page_2_options, required: true}
         ],
       };
       
-      var survey_trial = {
+      var free_response_trial = {
         type: 'survey-text',
         questions: [
            {prompt: "What regions of the spinal cord contributes to the brachial plexus?", name: 'Contributions_FR'}, 
@@ -43,6 +43,25 @@
           name: 'Neurons_MC',}
         
   ],
+};
+var check_consent = function(elem) {
+  if (document.getElementById('consent_checkbox').checked) {
+    return true;
+  }
+  else {
+    alert("If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'");
+    return false;
+  }
+  return false;
+};
+
+
+// declare the block.
+var reading_trial = {
+  type:'external-html',
+  url: "brachial_plexus_reading.html",
+  cont_btn: "start",
+  check_fn: check_consent
 };
 var video = {
     type: 'video-button-response',
@@ -52,9 +71,26 @@ var video = {
     choices: ['Complete'],
     prompt: '<p>Please click the "Complete" button once you have finished watching the video.</p>'
 }
+var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
+var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
+      
+      var post_test = {
+        type: 'survey-multi-choice',
+        questions: [
+          {prompt: "What regions of the spinal cord contributes to the brachial plexus?", 
+          name: 'Contributions_MC', 
+          options: page_1_options, 
+          required:true}, 
+          {prompt: "What kinds of neurons are found in the brachial plexus?", 
+          name: 'Neurons_MC', 
+          options: page_2_options, 
+          required:true}
+      ]
+      }
+
 /* create timeline */
       // here we create a list of the trials
-      let timeline = [welcome, video, end];
+      let timeline = [welcome, reading_trial, video, end];
 
       /* start the experiment */
       jsPsych.init({
