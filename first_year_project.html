@@ -5,16 +5,17 @@
     <script src="jspsych-6.3.0/jspsych.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-external-html.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-video-button-response.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <script>
     var conditional_array = ["cond1", "cond2", "cond3"]
     var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
+    
     var welcome = {
         type: 'html-keyboard-response',
         stimulus: 'Welcome to the experiment. This experiment looks to examine how prepatory materials impact student learning of a novel topic. Your participation is entirely voluntary and you can terminate your participation at any time. The study will take you about 30 - 40 minutes to complete. Once you are ready to begin, please any key to continue.'
@@ -89,24 +90,23 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
         }
       };
 /* create timeline */
-      // here we create a list of the trials
-      let timeline = [welcome, 
-    //   if (condition == "cond1") {
-    //     timeline.push(multi_choice_trial);
-    // } else if(condition == "cond2") {
-    //     timeline.push(free_response_trial);
-    // }else (condition == "cond3") {
+
+      let timeline = [welcome, condition, video, post_test, end];
+    
+      if (condition == "cond1") {
+        timeline.push(multi_choice_trial);
+    } else if(condition == "cond2") {
+        timeline.push(free_response_trial);
+    // } else (condition == reading_trial) {
     //     timeline.push(reading_trial);
-    // } 
-      video, 
-      post_test,
-    end];
+    }     
 
       /* start the experiment */
       jsPsych.init({
         timeline: timeline
+        
       });
-
+  
       </script>
 
     
