@@ -13,8 +13,8 @@
   </head>
   <body>
     <script>
-    var conditional_array = ["cond1", "cond2", "cond3"]
-    var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
+    // var conditional_array = ["cond1", "cond2", "cond3"]
+    // var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
     
     var welcome = {
         type: 'html-keyboard-response',
@@ -57,6 +57,7 @@ var reading_trial = {
   url: "brachial_plexus_reading.html",
   cont_btn: "start",
 };
+
 var video = {
     type: 'video-button-response',
     stimulus: [
@@ -91,15 +92,16 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
       };
 /* create timeline */
 
-      let timeline = [welcome, condition, video, post_test, end];
+      let timeline = [welcome, multi_choice_trial, free_response_trial, reading_trial, video, post_test, end];
     
-      if (condition == "cond1") {
-        timeline.push(multi_choice_trial);
-    } else if(condition == "cond2") {
-        timeline.push(free_response_trial);
-    // } else (condition == reading_trial) {
-    //     timeline.push(reading_trial);
-    }     
+    //   if (condition == "cond1") {
+    //     timeline.push(multi_choice_trial);
+    // } else if(condition == "cond2") {
+    //     timeline.push(free_response_trial);
+    // } else (condition == "cond3") {
+    //     timeline.push(reading_trial);  
+    // }
+         
 
       /* start the experiment */
       jsPsych.init({
