@@ -13,8 +13,8 @@
   </head>
   <body>
     <script>
-     var conditional_array = ["cond1", "cond2", "cond3"]
-     var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
+     
+     var condition = jsPsych.randomization.sampleWithoutReplacement(["cond1", "cond2", "cond3"], 1,); // random sample
      
     var welcome = {
         type: 'html-keyboard-response',
@@ -92,16 +92,17 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
         }
       };
 /* create timeline */
-
+     
       let timeline = [welcome, condition, video, post_test, end];
     
       if (condition == "cond1") {
          timeline.push(multi_choice_trial);
      } else if(condition == "cond2") {
          timeline.push(free_response_trial);
-     } else (timeline.push(reading_trial));
+     } else (condition == "cond3") {
+     timeline.push(reading_trial);
+    }
      
-         
 
       /* start the experiment */
       jsPsych.init({
