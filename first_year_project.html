@@ -7,15 +7,15 @@
     <script src="jspsych-6.3.0/plugins/jspsych-survey-multi-choice.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-survey-text.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-    <script src="jspsych-6.3.0/plugins/jspsych-external-html.js"></script>
+    <script src="jspsych-6.3.0/plugins/jspsych-html-button-response.js"></script>
     <script src="jspsych-6.3.0/plugins/jspsych-video-button-response.js"></script>
     <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <script>
-    // var conditional_array = ["cond1", "cond2", "cond3"]
-    // var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
-    
+     var conditional_array = ["cond1", "cond2", "cond3"]
+     var condition = jsPsych.randomization.sampleWithoutReplacement(conditional_array, 1,); // random sample
+     
     var welcome = {
         type: 'html-keyboard-response',
         stimulus: 'Welcome to the experiment. This experiment looks to examine how prepatory materials impact student learning of a novel topic. Your participation is entirely voluntary and you can terminate your participation at any time. The study will take you about 30 - 40 minutes to complete. Once you are ready to begin, please any key to continue.'
@@ -53,10 +53,11 @@
 
 //Control condition = Reading trial
 var reading_trial = {
-  type:'external-html',
-  url: "brachial_plexus_reading.html",
-  cont_btn: "start",
-};
+  type:'html-button-response',
+  stimulus: 
+    '<p> The brachial plexus is a network of nerves that gives rise to all the motor and sensory nerves of the upper extremity. This plexus arises from the anterior rami of spinal nerves C5-T1 that undergo several mergers and splits into trunks and divisions, until they finally give rise to their terminal branches. These terminal branches are responsible for motor and sensory innervation of the upper limb, and they include the musculocutaneous, axillary, radial, median and ulnar nerves. So, the brachial plexus originates from the ventral rami of the spinal nerves C5-T1. These rami quickly merge to form 3 trunks, which subsequently split into anterior and posterior division. This yields a total of 6 divisions (3 anterior and 3 posterior), which continue to pass inferiorly behind the clavicle to enter the axillary region. Finally, the divisions merge into cords of the brachial plexus, that give off the terminal branches of the brachial plexus. </p>',
+  choices: ['Proceed to the next section'],
+  };
 
 var video = {
     type: 'video-button-response',
@@ -92,15 +93,14 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
       };
 /* create timeline */
 
-      let timeline = [welcome, multi_choice_trial, free_response_trial, reading_trial, video, post_test, end];
+      let timeline = [welcome, condition, video, post_test, end];
     
-    //   if (condition == "cond1") {
-    //     timeline.push(multi_choice_trial);
-    // } else if(condition == "cond2") {
-    //     timeline.push(free_response_trial);
-    // } else (condition == "cond3") {
-    //     timeline.push(reading_trial);  
-    // }
+      if (condition == "cond1") {
+         timeline.push(multi_choice_trial);
+     } else if(condition == "cond2") {
+         timeline.push(free_response_trial);
+     } else (timeline.push(reading_trial));
+     
          
 
       /* start the experiment */
