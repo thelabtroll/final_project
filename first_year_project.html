@@ -98,17 +98,17 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
       };
 /* create timeline */
      
-      let timeline = [welcome, /*condition*/, multi_choice_trial, free_response_trial, reading_trial,video, post_test, end];
+      let timeline = [welcome];
     
-    //   if (condition == "cond1") {
-    //      timeline.push(multi_choice_trial);
-    //  } else if(condition == "cond2") {
-    //      timeline.push(free_response_trial);
-    //  } else (condition == "cond3") {
-    //  timeline.push(reading_trial);
-    // }
+      if (condition == "cond1") {
+         timeline.push(multi_choice_trial);
+     } else if(condition == "cond2") {
+         timeline.push(free_response_trial);
+     } else {timeline.push(reading_trial)};
      
-
+     timeline.push(video);
+     timeline.push(post_test);
+     timeline.push(end);
       /* start the experiment */
       jsPsych.init({
         timeline: timeline
