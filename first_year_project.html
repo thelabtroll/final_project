@@ -24,6 +24,7 @@
  //Experimental condition 1 = Multiple choice     
     var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
     var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
+    var page_3_options = ["A: Extending the forearm", "B: Flexing the forearm", "C: Adducting the arm", "D: Abducting the arm","E: Retracting the arm"];
      
       var multi_choice_trial = {
         type: 'survey-multi-choice',
@@ -35,7 +36,11 @@
           {prompt: "What kinds of neurons are found in the brachial plexus?", 
           name: 'Neurons_MC', 
           options: page_2_options, 
-          required:true}
+          required:true},
+          {prompt: "Each nerve in the brachial plexus helps to innervate a specific region of the upper extremity. Assume that the nerve responsible for innervating the biceps brachii muscle is damaged. Which of the following actions would you expect an individual would have difficulty performing?", 
+          name: 'Biceps_MC', 
+          options: page_3_options, 
+          required:true}, 
         ],
       };
  //Experimental condition 2 = Free response 
@@ -43,8 +48,8 @@
         type: 'survey-text',
         questions: [
            {prompt: "What regions of the spinal cord contributes to the brachial plexus?", name: 'Contributions_FR'}, 
-           {prompt: "What kinds of neurons are found in the brachial plexus?", 
-          name: 'Neurons_MC',}
+           {prompt: "What kinds of neurons are found in the brachial plexus?", name: 'Neurons_MC'},
+           {prompt: "Each nerve in the brachial plexus helps to innervate a specific region of the upper extremity. Assume that the nerve responsible for innervating the biceps brachii muscle is damaged. Which of the following actions would you expect an individual would have difficulty performing?", name: 'Biceps_FR'}
         
   ],
 };
@@ -93,15 +98,15 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
       };
 /* create timeline */
      
-      let timeline = [welcome, condition, video, post_test, end];
+      let timeline = [welcome, /*condition*/, multi_choice_trial, free_response_trial, reading_trial,video, post_test, end];
     
-      if (condition == "cond1") {
-         timeline.push(multi_choice_trial);
-     } else if(condition == "cond2") {
-         timeline.push(free_response_trial);
-     } else (condition == "cond3") {
-     timeline.push(reading_trial);
-    }
+    //   if (condition == "cond1") {
+    //      timeline.push(multi_choice_trial);
+    //  } else if(condition == "cond2") {
+    //      timeline.push(free_response_trial);
+    //  } else (condition == "cond3") {
+    //  timeline.push(reading_trial);
+    // }
      
 
       /* start the experiment */
