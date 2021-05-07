@@ -23,8 +23,9 @@
 
  //Experimental condition 1 = Multiple choice     
     var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
-    var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
+    var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons"];
     var page_3_options = ["A: Extending the forearm", "B: Flexing the forearm", "C: Adducting the arm", "D: Abducting the arm","E: Retracting the arm"];
+    var page_4_options = ["A: Branches, Cords, Divisions, Trunks, Rami", "B: Rami, Divisions, Trunks, Cords, Branches", "C: Trunks, Divisions, Cords, Branches, Rami", "D: Rami, Trunks, Divisions, Cords, Branches","E: Trunks, Branches, Cords, Rami, Divisions"];
      
       var multi_choice_trial = {
         type: 'survey-multi-choice',
@@ -41,15 +42,20 @@
           name: 'Biceps_MC', 
           options: page_3_options, 
           required:true}, 
+          {prompt: "Which of the following seems like a logical order for the pieces of the brachial plexus?", 
+          name: 'Ordering_MC', 
+          options: page_4_options, 
+          required:true}, 
         ],
       };
  //Experimental condition 2 = Free response 
       var free_response_trial = {
         type: 'survey-text',
         questions: [
-           {prompt: "What regions of the spinal cord contributes to the brachial plexus?", name: 'Contributions_FR'}, 
-           {prompt: "What kinds of neurons are found in the brachial plexus?", name: 'Neurons_MC'},
-           {prompt: "Each nerve in the brachial plexus helps to innervate a specific region of the upper extremity. Assume that the nerve responsible for innervating the biceps brachii muscle is damaged. Which of the following actions would you expect an individual would have difficulty performing?", name: 'Biceps_FR'}
+           {prompt: "What regions of the spinal cord contributes to the brachial plexus?", name: 'Contributions_FR', required: true}, 
+           {prompt: "What kinds of neurons are found in the brachial plexus?", name: 'Neurons_MC', required: true},
+           {prompt: "Each nerve in the brachial plexus helps to innervate a specific region of the upper extremity. Assume that the nerve responsible for innervating the biceps brachii muscle is damaged. Which of the following actions would you expect an individual would have difficulty performing?", name: 'Biceps_FR', required: true},
+           {prompt: "Which of the following seems like a logical order for the pieces of the brachial plexus?", name: 'Ordering_MC', required:true},
         
   ],
 };
@@ -74,6 +80,8 @@ var video = {
 }
 var page_1_options = ["A: Cervical and Thoracic", "B: Thoracic and Lumbar", "C: Lumbar and Sacral", "D: Sacral and Coccygeal"];
 var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor and sensory neurons",];
+var page_3_options = ["A: Latissimus dorsi", "B: Brachialis", "C: Subscapularis", "D: Teres major", "E: Teres minor"];
+var page_4_options = ["A: Coracobrachialis", "B: Pectoralis major", "C: Axillary artery", "D: The humerus", "E: The scapula"];
       
       var post_test = {
         type: 'survey-multi-choice',
@@ -85,7 +93,15 @@ var page_2_options = ["A: Motor neurons", "B: Sensory neurons", "C: Both motor a
           {prompt: "What kinds of neurons are found in the brachial plexus?", 
           name: 'Neurons_MC', 
           options: page_2_options, 
-          required:true}
+          required:true},
+          {prompt: "A 20-year-old woman fell from the uneven bars during the Olympic trial. A neurologic examination reveals that she has a lesion of the lateral cord of the brachial plexus. Which of the following muscles is most likely weakened by this injury?",
+          name: 'Cord_Injury',
+          options: page_3_options,
+          required: true},
+          {prompt: "2.	The cords of the brachial plexus are named for their relationship to which structure?",
+          name: 'Cord_Relationship',
+          options: page_4_options,
+          required: true},
       ]
       }
     let end = {
